@@ -285,8 +285,8 @@ In discrete-time form,
   infl/.style={napkin, ->, line width=0.45pt}
 ]
 % stocks
-\node[stock] (OPN) at (-1.0,1.2) {Open Tasks};
-\node[stock] (CLD) at (3.4,1.2)  {Closed Tasks};
+\node[stock] (OPN) at (-1.0,1.2) {Open};
+\node[stock] (CLD) at (3.4,1.2)  {Closed};
 
 % valved flow (two parallel wavy lines + valve = bowtie)
 \draw[napkin, line width=0.6pt] (OPN.east) -- (CLD.west);
@@ -295,16 +295,14 @@ In discrete-time form,
       fill=white] (val) at (1.2,1.05) {};
 \draw[napkin, line width=0.5pt] (val.north west) -- (val.south east);
 \draw[napkin, line width=0.5pt] (val.north east) -- (val.south west);
-\node[font=\small\itshape, text=napkinink] at (1.2,1.6) {Completion Rate};
+\node[font=\small\itshape, text=napkinink] at (1.2,1.6) {rate};
 
 % auxiliaries
-\node[aux] (Eff)  at (2.0,2.5)   {Effort};
-\node[aux] (Pr)   at (0.9,0.1)   {Prod};
-\node[aux] (OT)   at (2.4,-0.4)  {OT};
-\node[aux] (SP)   at (1.2,-1.5)  {SchedPress};
-\node[aux] (RT)   at (-1.5,-0.6) {RemTime};
-\node[aux] (CD)   at (-3.0,0.4)  {CurDate};
-\node[aux] (DL)   at (-3.0,-1.5) {Deadline};
+\node[aux] (Pr)   at (0.9,0.1)   {prod};
+\node[aux] (OT)   at (2.4,-0.4)  {over};
+\node[aux] (SP)   at (1.2,-1.5)  {press};
+\node[aux] (RT)   at (-1.5,-0.6) {Time};
+\node[aux] (DL)   at (-3.0,-0.6) {deadline};
 
 % influences into the valve
 \draw[infl] (Eff) -- (val.north);
