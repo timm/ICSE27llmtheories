@@ -168,12 +168,11 @@ propose our method as a discipline rather than a magic wand. The
 rest of this paper explains, with examples, all the follow steps
 which applying it to specific SE truisms:
 
-\begin{lstlisting}[style=py,frame=none,backgroundcolor=\color{white},keywordstyle=\color{black},xleftmargin=2em]
-theory_exploration = sensitivity(
-                       parameterSweep(
-                         metamorphicGuards(
-                           LLModeling())))
-\end{lstlisting}
+{\small \begin{verbatim}
+    theory_exploration = sensitivity(
+                           parameterSweep(
+                             metamorphicGuards(
+                               LLModeling())))\end{verbatim}}
 The metamorphic guards (\S\ref{sec:method}) are designed to surface
 hallucinated coherence before it reaches a conclusion. Nothing in
 this paper should be read as a new truism replacing the old ones;
@@ -196,22 +195,22 @@ with a shared evidence base.
 \section{A Peek at the Methodology}
 \label{sec:method-peek}
 
-In ur approach, intutions about softwre projects are formalized as systen dynamics models.
-These are then validated then executed to explore the intuitions.
+In our approach, intutions about softwre projects begin  life as hastily drawn
+diagarms which are then formalized as systen dynamics models.
+These models are then validated then executed to explore the intuitions.
 
-For example, suppose a resarcher was checking business inutions about comletion rates, overtime
-and open issues. They might hasily scrawl on a whiteboard something ike Figure~\ref{fig:cld} is a causal loop diagram
-(CLD) of the form drawn on a whiteboard in five minutes. Variables
-are named bubbles; signed arrows record perceived influence (``+''
-means same direction, ``$-$'' means opposite). Closed cycles are
-labelled \textbf{(B)} for balancing (self-correcting) or
-\textbf{(R)} for reinforcing (snowballing). The CLD captures the
-truism ``when behind, work harder''. Schedule pressure rises with
-shrinking time, lifts productivity and overtime, which raise
-completion rate and shrink open tasks---two (B) loops. The CLD is
-cheap to argue about but cannot be \emph{run}: it has no units, no
-state, no clock.
+For example, Figure~\ref{fig:cld} shpws an inution about the effects of adint newcomers
+to a ssoftware project.
+According to the diagram,
+ newcomers slow down projects since (a)~they must be trained by veterans (who stop
+  producing since they are training); and (b)~intro-project communication grows
+  more complex because there are now $n(n-1)/2$ communcation channels.
+The net result is Brooks' Law~\cite{brooks1975mmm}; i.e.
+ adding staff to a late project makes it later.
 
+Figure~\ref{fig:cld} is fast to draw but it
+cannot be \emph{run} since it  has no units, no
+  state, and no clock.
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[
@@ -225,50 +224,54 @@ state, no clock.
   bub/.style={inner sep=1pt},
   infl/.style={napkin, ->, line width=0.55pt}
 ]
-\node[bub] (DL)   at (-3.0,0.5)  {deadline};
-\node[bub] (RT)   at (-1.0,0.5)  {Time};
-\node[bub] (SP)   at (0.4,-1.3)  {press};
-\node[bub] (Pr)   at (1.6,0.1)   {prod};
-\node[bub] (OT)   at (2.0,-2.0)  {over};
-\node[bub] (CR)   at (3.4,0.9)   {rate};
-\node[bub] (OPN)  at (1.0,1.6)   {Open};
-\node[bub] (CLD)  at (3.6,1.7)   {Closed};
+\node[bub] (BO)   at (-3.0,0.8)  {boost};
+\node[bub] (NW)   at (-1.2,0.8)  {New};
+\node[bub] (VT)   at ( 0.6,0.8)  {Vet};
+\node[bub] (TR)   at (-0.4,-1.2) {train};
+\node[bub] (CM)   at ( 1.8,-1.2) {comm};
+\node[bub] (PR)   at ( 2.4,0.6)  {prod};
+\node[bub] (DN)   at ( 4.0,1.5)  {Done};
+\node[bub] (TD)   at ( 4.0,-0.4) {Todo};
 
-\draw[infl] (DL) -- node[above,font=\tiny]{$+$} (RT);
-\draw[infl] (RT) -- node[left,font=\tiny]{$-$} (SP);
-\draw[infl] (SP) -- node[above,font=\tiny,sloped]{$+$} (Pr);
-\draw[infl] (SP.east) .. controls (1.0,-1.7) .. node[below,font=\tiny]{$+$} (OT.west);
-\draw[infl] (Pr) -- node[above,font=\tiny]{$+$} (CR);
-\draw[infl] (OT.east) .. controls (3.0,-1.0) .. node[right,font=\tiny]{$+$} (CR.south);
-\draw[infl] (CR) .. controls (3.0,1.4) .. node[above,font=\tiny]{$-$} (OPN.east);
-\draw[infl] (CR) .. controls (3.6,1.4) .. node[above,font=\tiny]{$+$} (CLD.south);
-\draw[infl] (OPN) .. controls (-0.2,1.5) and (-1.2,1.2) .. node[above,font=\tiny,sloped]{$+$} (RT);
+\draw[infl] (BO) -- node[above,font=\tiny]{$+$} (NW);
+\draw[infl] (NW) -- node[left,font=\tiny,sloped]{$+$} (TR);
+\draw[infl] (NW) -- node[above,font=\tiny]{$+$} (VT);
+\draw[infl] (VT) -- node[right,font=\tiny,sloped]{$+$} (CM);
+\draw[infl] (VT) -- node[above,font=\tiny,sloped]{$+$} (PR);
+\draw[infl] (TR) -- node[below,font=\tiny,sloped]{$-$} (PR);
+\draw[infl] (CM) -- node[right,font=\tiny,sloped]{$-$} (PR);
+\draw[infl] (PR) -- node[above,font=\tiny,sloped]{$+$} (DN);
+\draw[infl] (PR) -- node[below,font=\tiny,sloped]{$-$} (TD);
 
-\node[font=\tiny\itshape,text=napkinink!75] at (0.9,0.4)  {(B)};
-\node[font=\tiny\itshape,text=napkinink!75] at (1.3,-0.7) {(B)};
+\node[font=\tiny\itshape,text=napkinink!75] at (1.0,-0.5) {(B)};
+\node[font=\tiny\itshape,text=napkinink!75] at (2.4,-0.4) {(B)};
 \end{tikzpicture}
-\caption{Causal loop diagram (the intuition). Bubbles are
-variables; signed arrows are influences; \textbf{(B)} marks
-balancing loops. Drawn freehand in minutes; cannot be executed.}
+\caption{Causal loop diagram (the intuition) for the \texttt{brooks}
+model. Bubbles are variables; signed arrows are influences;
+\textbf{(B)} marks balancing loops --- adding \emph{New} hires
+raises \emph{train} cost (newcomers distract veterans) and growing
+the team raises pair-wise \emph{comm} overhead; both cut \emph{prod}.
+Drawn freehand in minutes; cannot be executed.}
 \label{fig:cld}
 \end{figure}
-
-\textbf{Formalisation.} Figure~\ref{fig:sd} re-draws the same
-story as a systems-dynamics (SD) model. The shapes acquire
-meaning:
+Figure~\ref{fig:sd} re-draws the same
+story as a systems-dynamics (SD) model. Now, the node has some semantics:
 \begin{itemize}\itemsep0pt
-  \item \emph{Stocks} (rectangles, e.g.\ \textsf{Open Tasks},
-        \textsf{Closed Tasks}) hold conserved ``stuff''.
+  \item \emph{Stocks} (rectangles, e.g.\ \textsf{Todo},
+        \textsf{Done}, \textsf{New}, \textsf{Vet}) are containers that hold
+        ``stuff''.
   \item \emph{Flows} (double-line pipes with a valve, e.g.\
-        \textsf{Completion Rate}) move stuff between stocks.
-  \item \emph{Auxiliaries} (small circles, e.g.\ \textsf{Productivity},
-        \textsf{Overtime}, \textsf{Effort}) carry no stuff; they
-        compute multipliers that open or close the valves.
+        \textsf{prod}, \textsf{mature}) move stuff between stocks.
+  \item \emph{Auxiliaries} (small circles, e.g.\ \textsf{train},
+        \textsf{comm}) carry no stuff; they compute multipliers
+        that open or close the valves.
 \end{itemize}
-The defining discipline is \emph{conservation of matter}: stocks
-only change because flows move stuff in or out, and nothing else.
-In discrete-time form,
-\[ \mathit{Stock}(t+\Delta t) = \mathit{Stock}(t) + \Delta t \cdot (\mathit{inflow} - \mathit{outflow}). \]
+Stocks adhere to \emph{conservation of matter}; i.e. the current contents
+are their initial value, plus in-flows, minus outflows.
+In a discrete-time format:
+\begin{equation}\label{eq:stock}
+\mathit{Stock}(t+\Delta t) = \mathit{Stock}(t) + \Delta t \cdot (\mathit{inflow} - \mathit{outflow}).
+\end{equation}
 
 \begin{figure}[t]
 \centering
@@ -280,114 +283,70 @@ In discrete-time form,
     decoration={random steps, segment length=1.6mm, amplitude=0.35pt},
     line width=0.55pt, draw=napkinink
   },
-  stock/.style={napkin, rectangle, minimum width=1.4cm, minimum height=0.6cm},
+  stock/.style={napkin, rectangle, minimum width=1.3cm, minimum height=0.55cm},
   aux/.style={napkin, circle, inner sep=1pt, minimum size=0.55cm},
   infl/.style={napkin, ->, line width=0.45pt}
 ]
-% stocks
-\node[stock] (OPN) at (-1.0,1.2) {Open};
-\node[stock] (CLD) at (3.4,1.2)  {Closed};
+% --- task stocks: conserved (Todo + Done = const) ---
+\node[stock] (TD) at (-1.0,1.8) {Todo};
+\node[stock] (DN) at ( 3.4,1.8) {Done};
 
-% valved flow (two parallel wavy lines + valve = bowtie)
-\draw[napkin, line width=0.6pt] (OPN.east) -- (CLD.west);
-\draw[napkin, line width=0.6pt] (OPN.east) ++(0,-0.15) -- ++(4.4,0);
+% valved flow (Todo -> Done) driven by prod
 \node[napkin, draw, circle, inner sep=0pt, minimum size=0.45cm,
-      fill=white] (val) at (1.2,1.05) {};
-\draw[napkin, line width=0.5pt] (val.north west) -- (val.south east);
-\draw[napkin, line width=0.5pt] (val.north east) -- (val.south west);
-\node[font=\small\itshape, text=napkinink] at (1.2,1.6) {rate};
+      fill=white] (val1) at (1.2,1.8) {};
+\draw[napkin, line width=0.6pt, ->] (TD.east) -- (val1.west);
+\draw[napkin, line width=0.6pt, ->] ($(TD.east)+(0,-0.15)$) -- ($(val1.west)+(0,-0.15)$);
+\draw[napkin, line width=0.6pt, ->] (val1.east) -- (DN.west);
+\draw[napkin, line width=0.6pt, ->] ($(val1.east)+(0,-0.15)$) -- ($(DN.west)+(0,-0.15)$);
+\draw[napkin, line width=0.5pt] (val1.north west) -- (val1.south east);
+\draw[napkin, line width=0.5pt] (val1.north east) -- (val1.south west);
+\node[font=\small\itshape, text=napkinink] at (1.2,2.2) {prod};
 
-% auxiliaries
-\node[aux] (Pr)   at (0.9,0.1)   {prod};
-\node[aux] (OT)   at (2.4,-0.4)  {over};
-\node[aux] (SP)   at (1.2,-1.5)  {press};
-\node[aux] (RT)   at (-1.5,-0.6) {Time};
-\node[aux] (DL)   at (-3.0,-0.6) {deadline};
+% --- dev population stocks ---
+\node[stock] (NW) at (-1.0,-1.2) {New};
+\node[stock] (VT) at ( 3.4,-1.2) {Vet};
 
-% influences into the valve
-\draw[infl] (Eff) -- (val.north);
-\draw[infl] (Pr.north) -- (val.south west);
-\draw[infl] (OT.north) -- (val.south east);
+% maturation flow (New -> Vet) driven by mature\_rate
+\node[napkin, draw, circle, inner sep=0pt, minimum size=0.45cm,
+      fill=white] (val2) at (1.2,-1.2) {};
+\draw[napkin, line width=0.6pt, ->] (NW.east) -- (val2.west);
+\draw[napkin, line width=0.6pt, ->] ($(NW.east)+(0,-0.15)$) -- ($(val2.west)+(0,-0.15)$);
+\draw[napkin, line width=0.6pt, ->] (val2.east) -- (VT.west);
+\draw[napkin, line width=0.6pt, ->] ($(val2.east)+(0,-0.15)$) -- ($(VT.west)+(0,-0.15)$);
+\draw[napkin, line width=0.5pt] (val2.north west) -- (val2.south east);
+\draw[napkin, line width=0.5pt] (val2.north east) -- (val2.south west);
+\node[font=\small\itshape, text=napkinink] at (1.2,-0.8) {mature};
 
-% web of computation
-\draw[infl] (SP) -- (Pr);
-\draw[infl] (SP) -- (OT);
-\draw[infl] (RT) -- (SP);
-\draw[infl] (CD) -- (RT);
-\draw[infl] (DL) -- (RT);
-\draw[infl] (OPN.south) .. controls (-0.5,0.0) .. (SP);
+% exogenous hire pulse into New
+\node[aux] (BO) at (-3.2,-1.2) {boost};
+\draw[infl] (BO) -- (NW.west);
+
+% auxiliaries that compute prod
+\node[aux] (TR) at ( 0.0,0.4)  {train};
+\node[aux] (CM) at ( 2.4,0.4)  {comm};
+
+% influences into the prod valve
+\draw[infl] (TR.north) -- (val1.south west);
+\draw[infl] (CM.north) -- (val1.south east);
+
+% web of computation: which stock drives which auxiliary
+\draw[infl] (NW.north) .. controls (-0.4,0.2) .. (TR);
+\draw[infl] (VT.north) .. controls (3.0,0.2) .. (CM);
+\draw[infl] (VT.north) .. controls (4.6,-0.2) and (4.2,1.3) .. (val1.south east);
 
 \end{tikzpicture}
-\caption{Systems-dynamics formalisation of Figure~\ref{fig:cld}.
-Rectangles are stocks (conserved tasks); the valved pipe is the
-completion-rate flow; circles are auxiliaries that compute the
-flow rate. Now executable.}
+\caption{Systems-dynamics formalisation of Figure~\ref{fig:cld}
+for the \texttt{brooks} model. Rectangles are stocks: \emph{Todo}
+and \emph{Done} are conserved tasks; \emph{New} and \emph{Vet} are
+the developer population. The upper valved pipe is the
+completion-rate flow (\emph{prod}); the lower one is the
+maturation flow (\emph{New}$\!\to\!$\emph{Vet}). Circles are
+auxiliaries that compute the prod rate: \emph{train} cost grows
+with \emph{New}; pair-wise \emph{comm} overhead grows
+quadratically with \emph{Vet}; both reduce the valve opening.
+\emph{boost} is an exogenous late-hire pulse. Now executable.}
 \label{fig:sd}
 \end{figure}
-
-The Python models in this paper are direct implementations of
-this discipline. The dictionary of initial values lists stocks
-(upper-case keys) and parameters (lower-case keys); the
-\texttt{step} function computes one $\Delta t$ tick by reading
-current stocks, computing flows, and writing next stocks---no stock
-is changed except through an identified flow. Listing~\ref{lst:pressure}
-makes Figure~\ref{fig:sd} executable: \texttt{Open} and
-\texttt{Closed} are conserved task stocks, the \texttt{rate} flow
-is the only path between them, and a hidden reinforcing loop
-returns through \texttt{Fatigue} (toggle: \texttt{fatigue\_drag}).
-
-\begin{figure}[t]
-\begin{lstlisting}[style=py]
-def pressure():
-  # Stocks (UPPER): conserved.  Open + Closed = const.
-  init = {
-    'Open':          [200,   0, 500],   # open tasks
-    'Closed':        [0,     0, 500],   # completed tasks
-    'Time':          [60,    0, 120],   # time remaining
-    'Fatigue':       [0,     0, 1],     # burnout [0..1]
-    'deadline':      [60,    0, 120],   # initial time budget
-    'base_rate':     [4,     0.1, 20],  # baseline tasks/tick
-    'pressure_gain': [0.6,   0, 2],     # pressure -> prod boost
-    'overtime_gain': [0.4,   0, 2],     # pressure -> overtime
-    'fatigue_coef':  [0.02,  0, 0.2],   # overtime -> fatigue
-    'fatigue_drag':  [0.9,   0, 1],     # fatigue -> prod penalty
-    'recovery_rate': [0.05,  0, 0.5] }  # fatigue decay at rest
-
-  def step(dt, t, u, v):
-    # schedule pressure = work / time-left
-    press = u.Open / max(u.Time, 1)
-    # productivity: pressure boost minus fatigue drag (R loop)
-    prod  = u.base_rate * (1 + u.pressure_gain * press) \
-                        * (1 - u.fatigue_drag * u.Fatigue)
-    over  = u.overtime_gain * press
-    # the one flow between Open and Closed
-    rate  = max(0, min(prod + over, u.Open / dt))
-    v.Open    = u.Open    - dt * rate          # outflow
-    v.Closed  = u.Closed  + dt * rate          # inflow (conserved)
-    v.Time    = max(0, u.Time - dt)
-    v.Fatigue = max(0, u.Fatigue
-                       + dt * (u.fatigue_coef * over
-                               - u.recovery_rate * u.Fatigue))
-    for p in ('deadline','base_rate','pressure_gain',
-              'overtime_gain','fatigue_coef',
-              'fatigue_drag','recovery_rate'):
-      setattr(v, p, getattr(u, p))
-\end{lstlisting}
-\caption{The \texttt{pressure} model with explicit \texttt{Open}
-and \texttt{Closed} task stocks. Conservation holds: every tick,
-whatever leaves \texttt{Open} enters \texttt{Closed}.}
-\label{lst:pressure}
-\end{figure}
-
-\section{Example: the \texttt{brooks} Model}
-\label{sec:brooks}
-
-The Python below packs the entire Brooks's-law hypothesis into
-about 30 lines: \texttt{Vet} and \texttt{New} are people stocks,
-\texttt{Todo} and \texttt{Done} are conserved task stocks, and the
-boost at $t=10$ injects 10 newcomers who initially drain veterans
-through training and pairwise communication overhead.
-
 \begin{figure}[t]
 \begin{lstlisting}[style=py]
 def brooks():
@@ -413,19 +372,77 @@ def brooks():
     # backlog drains; floor at 0 to prevent overshoot
     v.Todo = u.Todo - dt * max(0, prod)
     v.Done = u.Done + dt * max(0, prod)
-    # New stock matures away; boost injects 10 newcomers at t=10
-    v.New  = u.New - dt * u.mature_rate * u.New \
-                   + (u.boost if t == 10 else 0)
+    # New stock matures away; boost is a one-shot pulse, fires in
+    # the tick containing t=10 (avoids float-equality misses).
+    pulse  = u.boost if t <= 10 < t + dt else 0
+    v.New  = u.New - dt * u.mature_rate * u.New + pulse
     # Vet stock grows by maturation flow
     v.Vet  = u.Vet + dt * u.mature_rate * u.New
     # params carry forward unchanged
     for p in ('boost','comm_coef','train_coef',
               'prod_rate','mature_rate'):
       setattr(v, p, getattr(u, p))
+    return v                          # hand the new state back
+  return init, step
+
+from types import SimpleNamespace as ns
+from random import uniform
+
+def tri(c, lo, hi): return c + (uniform(lo, hi) - c) * uniform(0, 1)
+
+# SD semantics in 4 lines: sample init -> repeatedly call step.
+def run(model, steps=200, dt=0.1):
+  init, step = model()
+  u = ns(**{k: tri(*spec) for k, spec in init.items()})
+  for i in range(steps):
+    u = step(dt, i*dt, u, ns(**vars(u)))       # one tick: u -> u'
+  return u
 \end{lstlisting}
-\caption{The \texttt{brooks} model in 30 lines of Python.}
+\caption{The \texttt{brooks} model plus the entire SD evaluator
+(\texttt{run}). SD semantics: pull initial values, repeatedly call
+\texttt{step}, swap states each tick.}
 \label{lst:brooks}
 \end{figure}
+
+
+
+The Python code in Figure~\ref{lst:brooks}
+can be generated by applying
+Equation~\ref{eqstock} to the nodes of Figure~\ref{fig:sd}.
+Note that within the {\em init} block of our models
+each numeric range has the form \texttt{[c,lo,hi]} (e.g.\ \texttt{'Vet':[10,0,100]}).
+This 
+  encodes a triangular distribution with  mode $c$, range $[lo,hi]$,
+  peak probability at $c$ falling linearly to zero at the endpoints.
+  Such distributions can be  sampled cheaply~\cite{SCHERER2003331} via the one-line approximation
+  $x \approx c + (u-c)v$ where $u \sim \mathrm{U}(lo,hi)$ and
+  $v \sim \mathrm{U}(0,1)$.
+
+Note that this modeling process looks deceptively simple. Having
+applied this to 67 truisms of softwre engineer, we can attest
+that from here the work
+gets much harder. That work includes assembling real-world project data
+(to conduct prudence checks);
+designing metamorphic tests
+to catch faulty models; extensive consultatiion with domain experts to explore
+valid parameter
+ranges;  and deciding which questions are worth asking and which
+observables actually settle them.  ALso, 
+as said in the introduction, once truisms are made
+executable, the volume of generated data can overwhelm a
+researcher into confabulating spurious conclusions.
+
+The rest of this paper shows
+where LLMs can carry much of that load, and where they cannot.
+
+\section{Example: the \texttt{brooks} Model}
+\label{sec:brooks}
+
+The Python below packs the entire Brooks's-law hypothesis into
+about 30 lines: \texttt{Vet} and \texttt{New} are people stocks,
+\texttt{Todo} and \texttt{Done} are conserved task stocks, and the
+boost at $t=10$ injects 10 newcomers who initially drain veterans
+through training and pairwise communication overhead.
 
 \section{Recent Industrial Experience with AI}
 \label{sec:industry}
